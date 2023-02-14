@@ -22,7 +22,7 @@ public class SecurityTokenGeneratorImpl implements SecurityTokenGenerator{
         Map<String, String> tokenMap= new HashMap<String,String>();
         user.setPassword("");
         Map<String, Object> customerData = new HashMap<>();
-        customerData.put("userEmail",user.getEmail());
+        customerData.put("userEmail",user.getUserId());
 
         String jwtTokenString = Jwts.builder()
                 .setClaims(customerData)

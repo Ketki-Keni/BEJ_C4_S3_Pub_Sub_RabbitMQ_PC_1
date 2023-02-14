@@ -9,6 +9,7 @@ package com.bej.product.controller;
 import com.bej.product.domain.Customer;
 import com.bej.product.domain.Product;
 import com.bej.product.service.CustomerService;
+import com.bej.product.service.CustomerServiceImpl;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,68 +22,54 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v2")
 public class CustomerController {
-    CustomerService customerService;
+    CustomerServiceImpl customerService;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerServiceImpl customerService) {
         this.customerService = customerService;
     }
 
-    //Uri : http://localhost:8083/api/v1/customer : Method : Post
-    @PostMapping("/customer")
-    public ResponseEntity<Customer> insertCustomer(@RequestBody Customer customer){
-        Customer customer1 = customerService.saveCustomer(customer);
-        return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+    //Uri : http://localhost:8083/api/v2/demo : Method : Get
+    @GetMapping("/demo")
+    public ResponseEntity<String> get(){
+        return new ResponseEntity<String>("Sample Demo",HttpStatus.OK);
     }
 
-    //Uri : http://localhost:8083/api/v1/customers : Method : Get
+    //Uri : http://localhost:8083/api/v2/register : Method : Post
+    @PostMapping("/register")
+    public ResponseEntity<Customer> insertCustomer(@RequestBody Customer customer){
+        Customer newCustomer = customerService.saveCustomer(customer);
+        return new ResponseEntity<Customer>(newCustomer, HttpStatus.OK);
+    }
+
+    //Uri : http://localhost:8083/api/v2/customers : Method : Get
     @GetMapping("/customers")
     public ResponseEntity<?> getAllCustomers(){
         List<Customer> customers = customerService.getAllCustomers();
         return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
     }
 
-//    ////Uri : http://localhost:8083/api/v1/CustomerByProduct/Samsung Phone : Method : Get
-//    @GetMapping("/CustomerByProduct/{customerProduct}")
-//    public ResponseEntity<?> getAllCustomerByProduct(@PathVariable String customerProduct){
-//        List<Customer> customers=customerService.getAllCustomerByProduct(customerProduct);
-//        return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
-//    }
 
-
-
-
-    //Uri : http://localhost:8082/api/v1/product : Method : Post
-    @PostMapping("/product")
-    public ResponseEntity<?> insertProduct(@RequestBody Product product, HttpServletRequest request){
-        System.out.println("header" +request.getHeader("Authorization"));
-        Claims claims = (Claims) request.getAttribute("claims");
-        System.out.println("email from claims :: " + claims.getSubject());
-        String email = claims.getSubject();
-        System.out.println("email :: "+email);
-        return new ResponseEntity<>(customerService.addProductToList(product, email), HttpStatus.CREATED);
+    //Uri : http://localhost:8082/api/v2/101/product : Method : Post
+    @PostMapping("/{customerId}/product")
+    public ResponseEntity<?> insertProduct(@RequestBody Product product, @PathVariable int customerId, HttpServletRequest request){
+        return new ResponseEntity<>(customerService.addProductToList(product, customerId), HttpStatus.CREATED);
     }
 
-    //Uri : http://localhost:8082/api/v1/products : Method : Get
-    @GetMapping("/products")
-    public ResponseEntity<?> getAllProducts(HttpServletRequest request){
-        System.out.println("header" +request.getHeader("Authorization"));
-        Claims claims = (Claims) request.getAttribute("claims");
-        System.out.println("email from claims :: " + claims.getSubject());
-        String email = claims.getSubject();
-        System.out.println("email :: "+email);
-        return new ResponseEntity<>(customerService.getAllProducts(email), HttpStatus.OK);
+    //Uri : http://localhost:8082/api/v2/101/products : Method : Get
+    @GetMapping("/{customerId}/products")
+    public ResponseEntity<?> getAllProductsFromList(@PathVariable int customerId, HttpServletRequest request){
+        return new ResponseEntity<>(customerService.getAllProducts(customerId), HttpStatus.OK);
     }
 
-//
-//    //Uri : http://localhost:8082/api/v1/product/103 : Method : Delete
-//    @DeleteMapping("/product/{id}")
-//    public ResponseEntity<?> deleteProduct(@PathVariable int id){
-//        if(productService.deleteProduct(id)) {
-//            return new ResponseEntity<String>("Product Deleted",HttpStatus.OK);
-//        }
-//        else{
-//            return new ResponseEntity<String>("Error Occurred",HttpStatus.NOT_FOUND);
-//        }
-//    }
+    //Uri : http://localhost:8082/api/v1/product/103 : Method : Delete
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable int id){
+        if(customerService.deleteProductFromList(id)) {
+            return new ResponseEntity<String>("Product Deleted",HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("Error Occurred",HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -24,19 +24,19 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) throws UserAlreadyExistsException {
-        if(userRepository.findById(user.getEmail()).isPresent())
-        {
-            throw new UserAlreadyExistsException();
-        }
+//        if(userRepository.findById(user.getUserId()).isPresent())
+//        {
+//            throw new UserAlreadyExistsException();
+//        }
         System.out.println(user);
         return userRepository.save(user);
     }
 
     @Override
-    public User findByEmailAndPassword(String email, String password) throws UserNotFoundException {
-        System.out.println("email"+email);
-        System.out.println("password"+password);
-        User loggedInUser = userRepository.findByEmailAndPassword(email,password);
+    public User findByUserIdAndPassword(int userId, String password) throws UserNotFoundException {
+        System.out.println("userId: "+userId);
+        System.out.println("password: "+password);
+        User loggedInUser = userRepository.findByUserIdAndPassword(userId,password);
         System.out.println(loggedInUser);
         if(loggedInUser == null)
         {

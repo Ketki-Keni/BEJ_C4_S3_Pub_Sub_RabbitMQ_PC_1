@@ -6,5 +6,5 @@ import com.bej.exception.UserNotFoundException;
 
 public interface UserService {
     User saveUser(User user) throws UserAlreadyExistsException;
-    User findByEmailAndPassword(String email,String password) throws UserNotFoundException;
+    User findByUserIdAndPassword(int userId,String password) throws UserNotFoundException;
 }

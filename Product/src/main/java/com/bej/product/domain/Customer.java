@@ -14,6 +14,7 @@ import java.util.List;
 @Document
 public class Customer {
     @Id
+    private String customerId;
     private String customerEmail;
     private String customerName;
     private String customerPhoneNo;
@@ -22,11 +23,20 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String customerEmail, String customerName, String customerPhoneNo, List<Product> productList) {
+    public Customer(String customerId, String customerEmail, String customerName, String customerPhoneNo, List<Product> productList) {
+        this.customerId = customerId;
         this.customerEmail = customerEmail;
         this.customerName = customerName;
         this.customerPhoneNo = customerPhoneNo;
         this.productList = productList;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerEmail() {
@@ -64,10 +74,11 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "customerId=" + customerEmail +
+                "customerId='" + customerId + '\'' +
+                ", customerEmail='" + customerEmail + '\'' +
                 ", customerName='" + customerName + '\'' +
                 ", customerPhoneNo='" + customerPhoneNo + '\'' +
-                ", customerProduct=" + productList +
+                ", productList=" + productList +
                 '}';
     }
 }

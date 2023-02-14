@@ -12,23 +12,23 @@ import javax.persistence.Id;
 @Entity
 public class User {
     @Id
-    private String email;
+    private int userId;
     private String password;
 
     public User() {
     }
 
-    public User(String email, String password) {
-        this.email = email;
+    public User(int userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -42,7 +42,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
+                "userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

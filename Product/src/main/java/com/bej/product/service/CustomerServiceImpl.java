@@ -33,14 +33,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
 
-//    @Override
-//    public List<Customer> getAllCustomerByProduct(String productName) {
-//        return customerRepository.findAllCustomerByCustomerProduct(productName);
-//    }
-
     @Override
-    public Customer addProductToList(Product product,String email) {
-        Customer customer = customerRepository.findByCustomerEmail(email);
+    public Customer addProductToList(Product product,int customerId) {
+        Customer customer = customerRepository.findById(customerId).get();
         if(customer.getProductList() == null)
         {
             customer.setProductList(Arrays.asList(product));
@@ -55,13 +50,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Product> getAllProducts(String email) {
-        return  customerRepository.findByCustomerEmail(email).getProductList();
+    public List<Product> getAllProducts(int customerId) {
+        return  customerRepository.findById(customerId).get().getProductList();
     }
 
-//    @Override
-//    public boolean deleteProductFromList(int productId) {
-//        customerRepository.deleteById(productId);
-//        return true;
-//    }
+    @Override
+    public boolean deleteProductFromList(int productId) {
+        customerRepository.deleteById(productId);
+        return true;
+    }
 }
