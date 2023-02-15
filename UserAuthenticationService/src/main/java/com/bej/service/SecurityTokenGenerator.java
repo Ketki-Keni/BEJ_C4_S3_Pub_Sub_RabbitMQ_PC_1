@@ -1,9 +1,9 @@
 package com.bej.service;
 
-import com.bej.domain.User;
+import com.bej.domain.Customer;
 
 import java.util.Map;
 
 public interface SecurityTokenGenerator {
-    public Map<String, String> generateToken(User user);
+    public Map<String, String> generateToken(Customer customer);
 }

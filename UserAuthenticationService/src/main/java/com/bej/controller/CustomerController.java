@@ -6,12 +6,11 @@
 
 package com.bej.controller;
 
-import com.bej.domain.User;
+import com.bej.domain.Customer;
 import com.bej.exception.UserAlreadyExistsException;
 import com.bej.exception.UserNotFoundException;
 import com.bej.service.SecurityTokenGenerator;
-import com.bej.service.UserService;
-import com.bej.service.UserServiceImpl;
+import com.bej.service.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,31 +21,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class UserController {
-    private UserServiceImpl userService;
+public class CustomerController {
+    private CustomerServiceImpl userService;
     SecurityTokenGenerator securityTokenGenerator;
 
     @Autowired
-    public UserController(UserServiceImpl userService, SecurityTokenGenerator securityTokenGenerator) {
+    public CustomerController(CustomerServiceImpl userService, SecurityTokenGenerator securityTokenGenerator) {
         this.userService = userService;
         this.securityTokenGenerator = securityTokenGenerator;
     }
 
     //Uri : http://localhost:8082/api/v1/user : Method : Post
-    @PostMapping("/user")
-    public ResponseEntity<?> saveUser(@RequestBody User user) throws UserAlreadyExistsException {
-        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
+    @PostMapping("/customer")
+    public ResponseEntity<?> saveUser(@RequestBody Customer customer) throws UserAlreadyExistsException {
+        return new ResponseEntity<>(userService.saveUser(customer), HttpStatus.CREATED);
     }
 
     //Uri : http://localhost:8082/api/v1/login : Method : Post
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) throws UserNotFoundException
+    public ResponseEntity<?> loginUser(@RequestBody Customer customer) throws UserNotFoundException
     {
-        User retrievedUser = userService.findByUserIdAndPassword(user.getUserId(),user.getPassword());
-        if(retrievedUser==null)
+        Customer retrievedCustomer = userService.findByCustomerIdAndPassword(customer.getCustomerId(), customer.getPassword());
+        if(retrievedCustomer ==null)
         {
             throw new UserNotFoundException();
         }
-        return new ResponseEntity<>(securityTokenGenerator.generateToken(user),HttpStatus.OK);
+        return new ResponseEntity<>(securityTokenGenerator.generateToken(customer),HttpStatus.OK);
     }
 }

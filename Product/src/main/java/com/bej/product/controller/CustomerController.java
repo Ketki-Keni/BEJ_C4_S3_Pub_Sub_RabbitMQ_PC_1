@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     //Uri : http://localhost:8083/api/v2/demo : Method : Get
-    @GetMapping("/demo")
+    @GetMapping("/user/demo")
     public ResponseEntity<String> get(){
         return new ResponseEntity<String>("Sample Demo",HttpStatus.OK);
     }
@@ -50,20 +50,20 @@ public class CustomerController {
     }
 
 
-    //Uri : http://localhost:8082/api/v2/101/product : Method : Post
-    @PostMapping("/{customerId}/product")
+    //Uri : http://localhost:8082/api/user/v2/101/product : Method : Post
+    @PostMapping("/user/{customerId}/product")
     public ResponseEntity<?> insertProduct(@RequestBody Product product, @PathVariable int customerId, HttpServletRequest request){
         return new ResponseEntity<>(customerService.addProductToList(product, customerId), HttpStatus.CREATED);
     }
 
-    //Uri : http://localhost:8082/api/v2/101/products : Method : Get
-    @GetMapping("/{customerId}/products")
+    //Uri : http://localhost:8082/api/user/v2/101/products : Method : Get
+    @GetMapping("/user/{customerId}/products")
     public ResponseEntity<?> getAllProductsFromList(@PathVariable int customerId, HttpServletRequest request){
         return new ResponseEntity<>(customerService.getAllProducts(customerId), HttpStatus.OK);
     }
 
     //Uri : http://localhost:8082/api/v1/product/103 : Method : Delete
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("user/product/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable int id){
         if(customerService.deleteProductFromList(id)) {
             return new ResponseEntity<String>("Product Deleted",HttpStatus.OK);

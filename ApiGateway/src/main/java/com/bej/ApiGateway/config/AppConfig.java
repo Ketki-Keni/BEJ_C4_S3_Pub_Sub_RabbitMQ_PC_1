@@ -19,9 +19,10 @@ public class AppConfig {
         return routeLocatorBuilder.routes()
                 .route(p->p.path("/api/v1/**")
 //                        .uri("http://localhost:8082/"))
-                        .uri("lb://user-authentication-service"))
+                        .uri("lb://customer-authentication-service"))
                 .route(p->p.path("/api/v2/**")
-                        .uri("http://localhost:8083/"))
+//                        .uri("http://localhost:8083/"))
+                        .uri("lb://product-service"))
                 .build();
     }
 }

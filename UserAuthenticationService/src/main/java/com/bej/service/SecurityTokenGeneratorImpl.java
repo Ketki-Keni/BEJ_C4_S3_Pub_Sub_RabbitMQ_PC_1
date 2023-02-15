@@ -6,7 +6,7 @@
 
 package com.bej.service;
 
-import com.bej.domain.User;
+import com.bej.domain.Customer;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,11 @@ import java.util.Map;
 @Service
 public class SecurityTokenGeneratorImpl implements SecurityTokenGenerator{
     @Override
-    public Map<String, String> generateToken(User user) {
+    public Map<String, String> generateToken(Customer customer) {
         Map<String, String> tokenMap= new HashMap<String,String>();
-        user.setPassword("");
+        customer.setPassword("");
         Map<String, Object> customerData = new HashMap<>();
-        customerData.put("userEmail",user.getUserId());
+        customerData.put("customerId", customer.getCustomerId());
 
         String jwtTokenString = Jwts.builder()
                 .setClaims(customerData)

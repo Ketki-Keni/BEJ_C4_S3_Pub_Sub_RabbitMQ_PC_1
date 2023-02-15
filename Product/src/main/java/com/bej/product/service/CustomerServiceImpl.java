@@ -8,8 +8,10 @@ package com.bej.product.service;
 
 import com.bej.product.domain.Customer;
 import com.bej.product.domain.Product;
+import com.bej.product.proxy.CustomerProxy;
 import com.bej.product.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,15 +19,24 @@ import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+
+    CustomerProxy customerProxy;
     CustomerRepository customerRepository;
+
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerProxy customerProxy, CustomerRepository customerRepository) {
+        this.customerProxy = customerProxy;
         this.customerRepository = customerRepository;
     }
-
     @Override
     public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+        Customer newCustomer = customerRepository.save(customer);
+        System.out.println(newCustomer);
+        if (!(newCustomer.getCustomerEmail().isEmpty())){
+            ResponseEntity responseEntity=customerProxy.saveCustomerInAuthService(newCustomer);
+            System.out.println(responseEntity.getBody());
+        }
+        return newCustomer;
     }
 
     @Override
