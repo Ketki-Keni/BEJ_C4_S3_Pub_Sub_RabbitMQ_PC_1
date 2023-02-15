@@ -23,6 +23,7 @@
     <module>UserAuthenticationService</module>
     <module>Product</module>
     <module>ApiGateway</module>
+    <module>EurekaServer</module>
   </modules>
 
   <dependencies>
