@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Entity
 public class Customer {
     @Id
-    private int customerId;
+    private String customerId;
     private String password;
 
 }

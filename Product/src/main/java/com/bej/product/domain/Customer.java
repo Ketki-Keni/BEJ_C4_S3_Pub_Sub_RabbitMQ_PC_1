@@ -16,7 +16,7 @@ import java.util.List;
 @Document
 public class Customer {
     @Id
-    private int customerId;
+    private String customerId;
     private String customerEmail;
     private String password;
     private String customerName;

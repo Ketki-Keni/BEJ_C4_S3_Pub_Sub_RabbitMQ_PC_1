@@ -7,24 +7,24 @@
 package com.bej.product.domain;
 
 public class Product {
-    int productId;
+    String productId;
     String productName;
     String productDescription;
 
     public Product() {
     }
 
-    public Product(int productId, String productName, String productDescription) {
+    public Product(String productId, String productName, String productDescription) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 

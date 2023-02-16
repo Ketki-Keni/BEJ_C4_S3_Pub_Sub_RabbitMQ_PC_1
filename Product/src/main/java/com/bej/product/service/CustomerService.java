@@ -11,8 +11,8 @@ import java.util.List;
 public interface CustomerService {
     public Customer saveCustomer(Customer customer) throws CustomerAlreadyExistsException;
     public List<Customer> getAllCustomers() throws CustomerNotFoundException;
-    public Customer addProductToList(Product product, int customerId);
-    public List<Product> getAllProducts(int customerId) throws ProductNotFoundException;
-    public boolean deleteProductFromList(int productId);
+    public Customer addProductToList(Product product, String customerId);
+    public List<Product> getAllProducts(String customerId) throws ProductNotFoundException;
+    public Customer deleteProductFromList(String customerId, String productId) throws ProductNotFoundException;
 
 }

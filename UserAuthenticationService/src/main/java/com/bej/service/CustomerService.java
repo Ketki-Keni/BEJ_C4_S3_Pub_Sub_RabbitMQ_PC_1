@@ -6,5 +6,5 @@ import com.bej.exception.UserNotFoundException;
 
 public interface CustomerService {
     Customer saveUser(Customer customer) throws UserAlreadyExistsException;
-    Customer findByCustomerIdAndPassword(int customerId, String password) throws UserNotFoundException;
+    Customer findByCustomerIdAndPassword(String customerId, String password) throws UserNotFoundException;
 }

@@ -8,6 +8,7 @@ package com.bej.product.service;
 
 import com.bej.product.domain.Customer;
 import com.bej.product.domain.Product;
+import com.bej.product.exception.ProductNotFoundException;
 import com.bej.product.proxy.CustomerProxy;
 import com.bej.product.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer addProductToList(Product product,int customerId) {
-        Customer customer = customerRepository.findById(customerId).get();
+    public Customer addProductToList(Product product,String customerId) {
+        Customer customer = customerRepository.findByCustomerId(customerId);
         if(customer.getProductList() == null)
         {
             customer.setProductList(Arrays.asList(product));
@@ -57,17 +58,25 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setProductList(products);
         }
         return customerRepository.save(customer);
-
     }
 
     @Override
-    public List<Product> getAllProducts(int customerId) {
+    public List<Product> getAllProducts(String customerId) {
         return  customerRepository.findById(customerId).get().getProductList();
     }
 
     @Override
-    public boolean deleteProductFromList(int productId) {
-        customerRepository.deleteById(productId);
-        return true;
+    public Customer deleteProductFromList(String customerId, String productId) throws ProductNotFoundException {
+
+        boolean productIdIsPresent = false;
+        Customer customer = customerRepository.findById(customerId).get();
+        List<Product> products = customer.getProductList();
+        productIdIsPresent = products.removeIf(x->x.getProductId().equals(productId));
+        if(!productIdIsPresent)
+        {
+            throw new ProductNotFoundException();
+        }
+        customer.setProductList(products);
+        return customerRepository.save(customer);
     }
 }

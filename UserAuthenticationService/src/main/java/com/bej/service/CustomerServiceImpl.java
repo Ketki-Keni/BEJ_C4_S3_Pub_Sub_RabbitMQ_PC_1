@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findByCustomerIdAndPassword(int customerId, String password) throws UserNotFoundException {
+    public Customer findByCustomerIdAndPassword(String customerId, String password) throws UserNotFoundException {
         System.out.println("userId: "+customerId);
         System.out.println("password: "+password);
         Customer loggedInCustomer = customerRepository.findByCustomerIdAndPassword(customerId,password);

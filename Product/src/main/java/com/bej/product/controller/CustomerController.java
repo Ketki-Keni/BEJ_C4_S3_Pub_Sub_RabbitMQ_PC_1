@@ -8,6 +8,8 @@ package com.bej.product.controller;
 
 import com.bej.product.domain.Customer;
 import com.bej.product.domain.Product;
+import com.bej.product.exception.ProductNotFoundException;
+import com.bej.product.repository.CustomerRepository;
 import com.bej.product.service.CustomerService;
 import com.bej.product.service.CustomerServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -23,10 +25,13 @@ import java.util.List;
 @RequestMapping("/api/v2")
 public class CustomerController {
     CustomerServiceImpl customerService;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerController(CustomerServiceImpl customerService) {
+    public CustomerController(CustomerServiceImpl customerService,
+                              CustomerRepository customerRepository) {
         this.customerService = customerService;
+        this.customerRepository = customerRepository;
     }
 
     //Uri : http://localhost:8083/api/v2/demo : Method : Get
@@ -52,24 +57,20 @@ public class CustomerController {
 
     //Uri : http://localhost:8082/api/user/v2/101/product : Method : Post
     @PostMapping("/user/{customerId}/product")
-    public ResponseEntity<?> insertProduct(@RequestBody Product product, @PathVariable int customerId, HttpServletRequest request){
+    public ResponseEntity<?> insertProduct(@RequestBody Product product, @PathVariable String customerId, HttpServletRequest request){
         return new ResponseEntity<>(customerService.addProductToList(product, customerId), HttpStatus.CREATED);
     }
 
     //Uri : http://localhost:8082/api/user/v2/101/products : Method : Get
     @GetMapping("/user/{customerId}/products")
-    public ResponseEntity<?> getAllProductsFromList(@PathVariable int customerId, HttpServletRequest request){
+    public ResponseEntity<?> getAllProductsFromList(@PathVariable String customerId, HttpServletRequest request){
         return new ResponseEntity<>(customerService.getAllProducts(customerId), HttpStatus.OK);
     }
 
-    //Uri : http://localhost:8082/api/v1/product/103 : Method : Delete
-    @DeleteMapping("user/product/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable int id){
-        if(customerService.deleteProductFromList(id)) {
-            return new ResponseEntity<String>("Product Deleted",HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<String>("Error Occurred",HttpStatus.NOT_FOUND);
-        }
+    //Uri : http://localhost:8082/api/v2/user/103/product/3 : Method : Delete
+    @DeleteMapping("user/{customerId}/product/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String customerId, @PathVariable String productId) throws ProductNotFoundException {
+
+            return new ResponseEntity<>(customerService.deleteProductFromList(customerId,productId),HttpStatus.OK);
     }
 }
