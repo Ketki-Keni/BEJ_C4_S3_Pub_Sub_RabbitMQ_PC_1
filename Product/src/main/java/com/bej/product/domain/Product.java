@@ -7,10 +7,10 @@
 package com.bej.product.domain;
 
 public class Product {
-    String productId;
-    String productName;
-    String productDescription;
-
+    private String productId;
+    private String productName;
+    private String productDescription;
+    private boolean isInStock;
     public Product() {
     }
 
@@ -42,6 +42,14 @@ public class Product {
 
     public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
+    }
+
+    public boolean isInStock() {
+        return isInStock;
+    }
+
+    public void setInStock(boolean inStock) {
+        isInStock = inStock;
     }
 
     @Override

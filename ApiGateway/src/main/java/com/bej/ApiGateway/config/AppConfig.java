@@ -23,6 +23,9 @@ public class AppConfig {
                 .route(p->p.path("/api/v2/**")
 //                        .uri("http://localhost:8083/"))
                         .uri("lb://product-service"))
+                .route(p->p.path("/api/v3/**")
+//                        .uri("http://localhost:8083/"))
+                        .uri("lb://notification-service"))
                 .build();
     }
 }

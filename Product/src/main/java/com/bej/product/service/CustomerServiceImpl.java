@@ -6,15 +6,20 @@
 
 package com.bej.product.service;
 
+import com.bej.product.config.ProductDTO;
 import com.bej.product.domain.Customer;
 import com.bej.product.domain.Product;
 import com.bej.product.exception.ProductNotFoundException;
 import com.bej.product.proxy.CustomerProxy;
 import com.bej.product.repository.CustomerRepository;
+import org.json.simple.JSONObject;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +28,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     CustomerProxy customerProxy;
     CustomerRepository customerRepository;
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+    @Autowired
+    DirectExchange exchange;
 
     @Autowired
     public CustomerServiceImpl(CustomerProxy customerProxy, CustomerRepository customerRepository) {
@@ -62,7 +71,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Product> getAllProducts(String customerId) {
-        return  customerRepository.findById(customerId).get().getProductList();
+//        return  customerRepository.findById(customerId).get().getProductList();
+
+        ProductDTO productDTO = new ProductDTO();
+        List<Product> products= customerRepository.findById(customerId).get().getProductList();
+        List<Product> notInStockProducts = new ArrayList<>();
+        for (Product product : products) {
+            if (!product.isInStock()){
+                notInStockProducts.add(product);
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("notListenedToTracks",notInStockProducts);
+        jsonObject.put("Id", customerId);
+        productDTO.setJsonObject(jsonObject);
+        rabbitTemplate.convertAndSend(exchange.getName(),"product-routing",productDTO);
+        return products;
     }
 
     @Override
